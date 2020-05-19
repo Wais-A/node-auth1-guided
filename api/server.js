@@ -1,14 +1,21 @@
-const express = require('express'); // importing express 
+// importing express
+const express = require('express')
+// importing the api-router
+const apiRouter = require('./api-router.js')
+// importing the auth router again but different
+const authRouter = require('../auth/auth-router')
+// importing our environmental modules
+const configureMiddleware = require('./configure-middleware.js')
 
-const apiRouter = require('./api-router.js'); // importing the api-router
-const authRouter = require('../auth/auth-router'); // importing the auth router again but different 
-const configureMiddleware = require('./configure-middleware.js'); // importing our environmental modules
+// activating express under the server const name
+const server = express()
 
-const server = express();
+// using the modules and passing in express
+configureMiddleware(server)
 
-configureMiddleware(server); // using the modules and passing in express
+// /api will be are first domain name
+server.use('/api', apiRouter)
+// /api/auth is for authRouter
+server.use('/api/auth', authRouter)
 
-server.use('/api', apiRouter); // /api will be are first domain name
-server.use('/api/auth', authRouter) // /api/auth is for authRouter
-
-module.exports = server;
+module.exports = server
